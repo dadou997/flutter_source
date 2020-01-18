@@ -1,0 +1,17 @@
+# ignore everything
+*
+# except for items in the pkg directory and self.
+# except for our files in boringssl.  The checkout is in boringssl/src.
+!.gitignore
+!pkg
+!pkg_tested
+!/tcmalloc
+!d8
+!7zip.tar.gz.sha1
+!firefox_jsshell
+!clang.tar.gz.sha1
+!unittest.tar.gz.sha1
+!update.sh
+!/wasmer
+# but ignore a subfolder of tcmalloc (some client ignores /tcmalloc/.gitignore)
+/tcmalloc/gperftools

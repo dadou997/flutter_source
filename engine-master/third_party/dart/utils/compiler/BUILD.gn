@@ -1,0 +1,107 @@
+# Copyright (c) 2016, the Dart project authors.  Please see the AUTHORS file
+# for details. All rights reserved. Use of this source code is governed by a
+# BSD-style license that can be found in the LICENSE file.
+
+import("../../sdk_args.gni")
+import("../../utils/compile_platform.gni")
+import("../application_snapshot.gni")
+import("../create_timestamp.gni")
+
+create_timestamp_file("dart2js_files_stamp") {
+  path = rebase_path("../../pkg/compiler/lib")
+  output = "$target_gen_dir/dart2js_files.stamp"
+}
+
+create_timestamp_file("runtime_lib_files_stamp") {
+  path = rebase_path("../../runtime/lib")
+  output = "$target_gen_dir/runtime_lib_files.stamp"
+}
+
+create_timestamp_file("dartdoc_files_stamp") {
+  path = rebase_path("../../sdk/lib/_internal/dartdoc")
+  output = "$target_gen_dir/dartdoc_files.stamp"
+}
+
+prebuilt_dart_action("dart2js_create_snapshot_entry") {
+  deps = [
+    ":dart2js_files_stamp",
+    ":dartdoc_files_stamp",
+    ":runtime_lib_files_stamp",
+  ]
+
+  output_dir = rebase_path(target_gen_dir)
+
+  script = "create_snapshot_entry.dart"
+
+  inputs = [
+    "../../sdk/lib/_internal/sdk_library_metadata/lib/libraries.dart",
+    "$target_gen_dir/dart2js_files.stamp",
+    "../../tools/make_version.py",
+    "../../tools/VERSION",
+  ]
+
+  outputs = [
+    "$target_gen_dir/dart2js.dart",
+  ]
+
+  packages = "../../.packages"
+
+  args = [ "--output_dir=$output_dir" ]
+}
+
+if (use_nnbd) {
+  libraries_specification_path = "sdk_nnbd/lib/libraries.json"
+} else {
+  libraries_specification_path = "sdk/lib/libraries.json"
+}
+
+application_snapshot("dart2js") {
+  deps = [
+    ":compile_dart2js_platform",
+    ":dart2js_create_snapshot_entry",
+  ]
+  inputs = [
+    "$root_out_dir/dart2js_platform.dill",
+    "$root_out_dir/dart2js_outline.dill",
+  ]
+  vm_args = []
+  main_dart = "$target_gen_dir/dart2js.dart"
+  training_args = [
+    "--packages=" + rebase_path("../../.packages"),
+    "--libraries-spec=" + rebase_path("../../$libraries_specification_path"),
+    rebase_path("$target_gen_dir/dart2js.dart"),
+  ]
+}
+
+compile_platform("compile_dart2js_platform") {
+  single_root_scheme = "org-dartlang-sdk"
+  single_root_base = rebase_path("../../")
+  libraries_specification_uri =
+      "org-dartlang-sdk:///$libraries_specification_path"
+
+  outputs = [
+    "$root_out_dir/dart2js_platform.dill",
+    "$root_out_dir/dart2js_outline.dill",
+  ]
+
+  args = [
+    "--target=dart2js",
+    "dart:core",
+  ]
+}
+compile_platform("compile_dart2js_server_platform") {
+  single_root_scheme = "org-dartlang-sdk"
+  single_root_base = rebase_path("../../")
+  libraries_specification_uri =
+      "org-dartlang-sdk:///$libraries_specification_path"
+
+  outputs = [
+    "$root_out_dir/dart2js_server_platform.dill",
+    "$root_out_dir/dart2js_server_outline.dill",
+  ]
+
+  args = [
+    "--target=dart2js_server",
+    "dart:core",
+  ]
+}

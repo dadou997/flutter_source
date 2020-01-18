@@ -1,0 +1,23 @@
+# Copyright 2013 The Flutter Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+dart_ui_files = [
+  "$flutter_root/lib/ui/channel_buffers.dart",
+  "$flutter_root/lib/ui/compositing.dart",
+  "$flutter_root/lib/ui/geometry.dart",
+  "$flutter_root/lib/ui/hash_codes.dart",
+  "$flutter_root/lib/ui/hooks.dart",
+  "$flutter_root/lib/ui/isolate_name_server.dart",
+  "$flutter_root/lib/ui/lerp.dart",
+  "$flutter_root/lib/ui/natives.dart",
+  "$flutter_root/lib/ui/painting.dart",
+  "$flutter_root/lib/ui/plugins.dart",
+  "$flutter_root/lib/ui/pointer.dart",
+  "$flutter_root/lib/ui/semantics.dart",
+  "$flutter_root/lib/ui/text.dart",
+  "$flutter_root/lib/ui/ui.dart",
+  "$flutter_root/lib/ui/window.dart",
+]
+
+dart_ui_path = "$flutter_root/lib/ui/ui.dart"

@@ -1,0 +1,27 @@
+# Copyright 2013 The Flutter Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+import("config.gni")
+
+config("flutter_config") {
+  defines = feature_defines_list
+}
+
+source_set("common") {
+  sources = [
+    "settings.cc",
+    "settings.h",
+    "task_runners.cc",
+    "task_runners.h",
+  ]
+
+  deps = [
+    "$flutter_root/fml",
+  ]
+
+  public_configs = [
+    ":flutter_config",
+    "$flutter_root:config",
+  ]
+}

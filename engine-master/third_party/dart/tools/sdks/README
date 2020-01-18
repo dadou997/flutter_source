@@ -1,0 +1,13 @@
+This directory contains a stable Dart SDK, which is used to build the
+observatory and to run the test scripts.
+
+The DEPS use CIPD's ${platform} syntax find the right SDK for the platform.
+
+We are currently using the 32-bit ia32 build as the default on Windows, and the
+64-bit x64 build as the default on Linux and Mac. arm and arm64 CIPD packages
+are used on Linux.
+
+To upload new versions of these CIPD packages, run "./update.sh" in this
+directory. Because these SDKs are used for the presubmit dartfmt check on
+changed files, they may need to be updated often when dartfmt is changing
+rapidly. Access to the project-dart-admins Luci auth group is required to do so.

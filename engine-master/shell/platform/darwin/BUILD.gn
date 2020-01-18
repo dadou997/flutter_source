@@ -1,0 +1,68 @@
+# Copyright 2013 The Flutter Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+assert(is_mac || is_ios)
+
+import("$flutter_root/testing/testing.gni")
+
+group("darwin") {
+  if (is_ios) {
+    deps = [
+      "ios:flutter_framework",
+    ]
+  }
+  if (is_mac) {
+    deps = [
+      "macos",
+    ]
+  }
+}
+
+source_set("flutter_channels") {
+  sources = [
+    "common/buffer_conversions.h",
+    "common/buffer_conversions.mm",
+    "common/framework/Headers/FlutterBinaryMessenger.h",
+    "common/framework/Headers/FlutterChannels.h",
+    "common/framework/Headers/FlutterCodecs.h",
+    "common/framework/Headers/FlutterMacros.h",
+    "common/framework/Source/FlutterChannels.mm",
+    "common/framework/Source/FlutterCodecs.mm",
+    "common/framework/Source/FlutterStandardCodec.mm",
+    "common/framework/Source/FlutterStandardCodec_Internal.h",
+  ]
+
+  deps = [
+    "$flutter_root/common",
+    "$flutter_root/flow",
+    "$flutter_root/fml",
+    "$flutter_root/runtime",
+    "$flutter_root/shell/common",
+    "//third_party/skia",
+  ]
+
+  public_configs = [ "$flutter_root:config" ]
+}
+
+test_fixtures("flutter_channels_fixtures") {
+  fixtures = []
+}
+
+executable("flutter_channels_unittests") {
+  testonly = true
+
+  sources = [
+    "common/framework/Source/flutter_codecs_unittest.mm",
+    "common/framework/Source/flutter_standard_codec_unittest.mm",
+  ]
+
+  deps = [
+    ":flutter_channels",
+    ":flutter_channels_fixtures",
+    "$flutter_root/testing",
+    "//third_party/dart/runtime:libdart_jit",
+  ]
+
+  public_configs = [ "$flutter_root:config" ]
+}

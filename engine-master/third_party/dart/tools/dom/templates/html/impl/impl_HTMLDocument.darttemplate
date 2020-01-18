@@ -1,0 +1,159 @@
+// Copyright (c) 2012, the Dart project authors.  Please see the AUTHORS file
+// for details. All rights reserved. Use of this source code is governed by a
+// BSD-style license that can be found in the LICENSE file.
+
+// WARNING: Do not edit - generated code.
+
+part of $LIBRARYNAME;
+
+$(ANNOTATIONS)$(NATIVESPEC)$(CLASS_MODIFIERS)class $CLASSNAME$EXTENDS$IMPLEMENTS {
+$!MEMBERS
+
+  BodyElement body;
+
+  /// UNSTABLE: Chrome-only - create a Range from the given point.
+  @Unstable()
+  Range caretRangeFromPoint(int x, int y) {
+    return _caretRangeFromPoint(x, y);
+  }
+
+  Element elementFromPoint(int x, int y) {
+    return _elementFromPoint(x, y);
+  }
+
+  HeadElement get head => _head;
+
+  String get lastModified => _lastModified;
+
+  String get preferredStylesheetSet => _preferredStylesheetSet;
+
+  String get referrer => _referrer;
+
+  String get selectedStylesheetSet => _selectedStylesheetSet;
+  set selectedStylesheetSet(String value) {
+    _selectedStylesheetSet = value;
+  }
+
+  List<StyleSheet> get styleSheets => _styleSheets;
+
+  String get title => _title;
+
+  set title(String value) {
+    _title = value;
+  }
+
+  /**
+   * Returns page to standard layout.
+   *
+   * Has no effect if the page is not in fullscreen mode.
+   *
+   * ## Other resources
+   *
+   * * [Fullscreen
+   *   API](https://developer.mozilla.org/en-US/docs/Web/API/Fullscreen_API)
+   *   from MDN.
+   * * [Fullscreen specification](http://www.w3.org/TR/fullscreen/) from W3C.
+   */
+  @SupportedBrowser(SupportedBrowser.CHROME)
+  @SupportedBrowser(SupportedBrowser.SAFARI)
+  void exitFullscreen() {
+    _webkitExitFullscreen();
+  }
+
+
+  /**
+   * Register a custom subclass of Element to be instantiatable by the DOM.
+   *
+   * This is necessary to allow the construction of any custom elements.
+   *
+   * The class being registered must either subclass HtmlElement or SvgElement.
+   * If they subclass these directly then they can be used as:
+   *
+   *     class FooElement extends HtmlElement{
+   *        void created() {
+   *          print('FooElement created!');
+   *        }
+   *     }
+   *
+   *     main() {
+   *       document.registerElement('x-foo', FooElement);
+   *       var myFoo = new Element.tag('x-foo');
+   *       // prints 'FooElement created!' to the console.
+   *     }
+   *
+   * The custom element can also be instantiated via HTML using the syntax
+   * `<x-foo></x-foo>`
+   *
+   * Other elements can be subclassed as well:
+   *
+   *     class BarElement extends InputElement{
+   *        void created() {
+   *          print('BarElement created!');
+   *        }
+   *     }
+   *
+   *     main() {
+   *       document.registerElement('x-bar', BarElement);
+   *       var myBar = new Element.tag('input', 'x-bar');
+   *       // prints 'BarElement created!' to the console.
+   *     }
+   *
+   * This custom element can also be instantiated via HTML using the syntax
+   * `<input is="x-bar"></input>`
+   *
+   */
+  Function registerElement2(String tag, [Map options]) {
+    return _registerCustomElement(JS('', 'window'), this, tag, options);
+  }
+
+  /** *Deprecated*: use [registerElement] instead. */
+  @deprecated
+  void register(String tag, Type customElementClass, {String extendsTag}) {
+    return registerElement(tag, customElementClass, extendsTag: extendsTag);
+  }
+
+  /**
+   * Static factory designed to expose `visibilitychange` events to event
+   * handlers that are not necessarily instances of [Document].
+   *
+   * See [EventStreamProvider] for usage information.
+   */
+  @SupportedBrowser(SupportedBrowser.CHROME)
+  @SupportedBrowser(SupportedBrowser.FIREFOX)
+  @SupportedBrowser(SupportedBrowser.IE, '10')
+  static const EventStreamProvider<Event> visibilityChangeEvent =
+      const _CustomEventStreamProvider<Event>(
+        _determineVisibilityChangeEventType);
+
+  static String _determineVisibilityChangeEventType(EventTarget e) {
+    if (JS('bool', '(typeof #.hidden !== "undefined")', e)) {
+      // Opera 12.10 and Firefox 18 and later support
+      return 'visibilitychange';
+    } else if (JS('bool', '(typeof #.mozHidden !== "undefined")', e)) {
+      return 'mozvisibilitychange';
+    } else if (JS('bool', '(typeof #.msHidden !== "undefined")', e)) {
+      return 'msvisibilitychange';
+    } else if (JS('bool', '(typeof #.webkitHidden !== "undefined")', e)) {
+      return 'webkitvisibilitychange';
+    }
+    return 'visibilitychange';
+  }
+
+  @SupportedBrowser(SupportedBrowser.CHROME)
+  @SupportedBrowser(SupportedBrowser.FIREFOX)
+  @SupportedBrowser(SupportedBrowser.IE, '10')
+  Stream<Event> get onVisibilityChange =>
+      visibilityChangeEvent.forTarget(this);
+
+  /// Creates an element upgrader which can be used to change the Dart wrapper
+  /// type for elements.
+  ///
+  /// The type specified must be a subclass of HtmlElement, when an element is
+  /// upgraded then the created constructor will be invoked on that element.
+  ///
+  /// If the type is not a direct subclass of HtmlElement then the extendsTag
+  /// parameter must be provided.
+  ElementUpgrader createElementUpgrader(Type type, {String extendsTag}) {
+    return new _JSElementUpgrader(this, type, extendsTag);
+  }
+}
